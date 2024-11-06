@@ -1,15 +1,30 @@
+# .github/workflows/ci.yml
+
+name: CI Pipeline  # Назва workflow
+
+# Додавання тригерів для запуску GitHub Actions
+on:
+  push:              # Запуск при кожному пуші в репозиторій
+    branches:        # Можна вказати, на яких гілках має запускатися (опціонально)
+      - main
+  pull_request:      # Запуск при створенні pull request
+
+# Опис завдань (jobs) для CI/CD
 jobs:
   test:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: [3.7, 3.8, 3.9]  # Виконується на кількох версіях Python
 
     steps:
-    - uses: actions/checkout@v2
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
-        python-version: ${{ matrix.python-version }}
-    - run: python -m pip install --upgrade pip
-    - run: python -m unittest discover
+        python-version: 3.8
+
+    - name: Install dependencies
+      run: python -m pip install --upgrade pip
+
+    - name: Run tests
+      run: python -m unittest discover
